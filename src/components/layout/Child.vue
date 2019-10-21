@@ -1,0 +1,63 @@
+<template>
+  <div class="child">
+    <div class="avatar" :style="{'background': `url(${childInfo.img || './static/default_avatar.png'}) no-repeat`}"></div>
+    <div class="info">
+      <p>{{ childInfo.nickName || '宝贝' }}</p>
+      <p>正在学习 {{childInfo.grade}}年级 设备已绑定</p>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapState } from 'vuex';
+export default {
+  name: 'child',
+  props: ['childInfo'],
+  data() {
+    return {
+    }
+  },
+  computed: {
+    ...mapState(['userInfo']),
+    cnGrade() {
+      // return Math.floor(childInfo.grade);
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+.child {
+  height: 70px;
+  background: white;
+  padding: 5px;
+  margin: 7.5px 0;
+  border: 1px solid #e8e8e8;
+  display: flex;
+  align-items: center;
+  // justify-content: center;
+  .avatar {
+    height: 55px;
+    width: 55px;
+    border-radius: 35px;
+    margin: 0 10px;
+    // background: orange;
+    border: 1px solid #e8e8e8;
+    background-size: cover !important;
+    display: inline-block;
+  }
+  .info {
+    font-size: 16px;
+    // border: 1px solid red;
+    display: inline-block;
+    p:first-child {
+      font-size: 16.7px;
+      line-height: 22px;
+    }
+    p:nth-child(2) {
+      font-size: 9px;
+      line-height: 22px;
+      color: #7a7a7a;
+    }
+  }
+}
+</style>

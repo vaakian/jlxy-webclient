@@ -1,0 +1,110 @@
+.user-box,
+.mission-status,
+.study-status {
+  margin: 8px;
+}
+.level {
+  color: #7a7a7a;
+  font-size: 10.7px;
+  margin-left: 5px;
+}
+.user-box {
+  border-bottom: 1px solid #e8e8e8;
+}
+.user-info {
+  display: flex;
+  justify-content: space-between;
+  .user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    border: 1px solid #e8e8e8;
+    background: white;
+    position: relative;
+    img {
+      height: 20px;
+      width: 20px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+    .user-switch {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 250px;
+      font-size: 24.3px;
+      background: white;
+      border: 1px solid #e8e8e8;
+      z-index: 10;
+      li {
+        line-height: 40px;
+        padding: 2px 5px;
+      }
+      .user-active {
+        background: #a9a9a9;
+        display: inline-block;
+        border-radius: 13px;
+        width: 24.3px;
+        height: 24.3px;
+      }
+    }
+  }
+  div,
+  button {
+    display: inline-block;
+  }
+  .user-detail {
+    vertical-align: top;
+    margin-top: 9px;
+    margin-left: 3px;
+    .name {
+      font-size: 16.7px;
+    }
+    .grade {
+      font-size: 10.7px;
+      color: #7a7a7a;
+    }
+  }
+}
+
+/* 学习统计 */
+
+.study-history {
+  .study-statistic,
+  .study-mission {
+    background: white;
+    border: 1px solid #e8e8e8;
+    color: #7a7a7a;
+    font-size: 13.4px;
+    padding: 5px 15px 5px 2em;
+    margin: 0 0 5px 0;
+    p {
+      text-indent: -1em;
+      .text-red {
+        margin-left: -3px;
+      }
+    }
+    p:before {
+      content: "";
+      display: inline-block;
+      background: url(../../static/icon/label.png) no-repeat top left;
+      background-size: 100%;
+      width: 14.4px;
+      height: 14.4px;
+      margin: 2px;
+      vertical-align: bottom;
+    }
+  }
+}
+
+/* 任务动态 */
+.mission-status {
+  border-bottom: 1px solid #e8e8e8;
+}
+
+
+/* 学习动态 */
+.study-status {
+
+}

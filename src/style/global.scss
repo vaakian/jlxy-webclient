@@ -1,0 +1,46 @@
+/* 按钮颜色 */
+$blue: #5f8ae8;
+$border-blue: #3f69c4;
+$border-gray: #e8e8e8;
+/* 学习-任务动态-评级 */
+$task-err: #e85f5f;
+$task-suc: #229100;
+$task-great: $blue;
+/* 学习-完成情况-小字 */
+$status-red: #fa5858;
+$status-yellow: #e9aa02;
+$status-green: #00d714;
+/* 方正粗圆简体 */
+@font-face {
+  font-family: '方正粗圆简体';  
+  src: url('../../static/font.ttf');
+}
+/* 清除浏览器默认样式 */
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "方正粗圆简体"
+}
+a { 
+  text-decoration: none;
+  color: inherit;
+}
+ul li {
+  list-style: none;
+}
+/* 全局按钮样式 */
+.btn-blue {
+  font-size: 13.9px;
+  color: white;
+  width: 90px;
+  height: 40px;
+  background: $blue;
+  border:2px solid $border-blue;
+  border-radius: 5px; 
+}
+.btn-blue:hover {
+  background: red;
+}
+.sub-title {
+  font-size: 13.5px;
+}
