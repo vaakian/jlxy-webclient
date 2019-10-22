@@ -93,16 +93,7 @@ export default {
         if (tabItems[index].path == path) this.tabActive = index;
       }
     },
-    // overlay高度适应
-    resetOverlayHeight() {
-      let dom = document.getElementsByClassName('overlay')[0];
-      if(!dom) return;
-      function hasScrollbar() {
-        return document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight);
-      }
-      dom.style.height = !hasScrollbar() ? '100vh' : '100%';
-      console.log(hasScrollbar());
-    }
+
   }
 }
 </script>
@@ -143,6 +134,7 @@ export default {
 
 .child-view {
   transition: all 0.3s;
+  min-height: calc(100vh - 68px);
 }
 .slide-left-enter,
 .slide-right-leave-active {

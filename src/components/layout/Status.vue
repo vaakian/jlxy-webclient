@@ -115,7 +115,7 @@ export default {
       }];
       const rank = this.rank;
       if (rank > 0.8) return colors[0];
-      else if (rank > 0.6) return color[1];
+      else if (rank > 0.6) return colors[1];
       else return colors[2];
     },
     // 前三个正确、错误

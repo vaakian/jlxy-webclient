@@ -4,7 +4,7 @@
       <template v-slot:content="childProps">
         <div class="dilog-content">
           <div class="dilog-text">
-            <p>您正在给宝贝{{ type }}：</p>
+            <p>您正在给 <span class="text-blue">{{ currentChild.nickName || '宝贝' }}</span> {{ type }}：</p>
             <p>
               "
               <span class="text-blue">{{content}}</span>"请再次确认！
@@ -22,9 +22,13 @@
 
 <script>
 import Overlay from './Overlay';
+import { mapGetters } from 'vuex';
 export default {
   components: { Overlay },
-  props: ['content', 'OnCancel', 'OnConfirm', 'cancelText', 'confirmText', 'type']
+  props: ['content', 'OnCancel', 'OnConfirm', 'cancelText', 'confirmText', 'type'],
+  computed: {
+    ...mapGetters(['currentChild'])
+  }
 }
 </script>
 <style lang="scss" scoped>

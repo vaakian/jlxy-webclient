@@ -38,6 +38,15 @@ export default {
     ...mapGetters(['haveChildren', 'currentChild', 'vipExpireDay']),
     ...mapGetters('interact', ['allFinishedTask', 'currentTask']),
     ...mapState('interact', ['taskDetail', 'taskStatus']),
+    finishTip() {
+      const { status } = this.taskStatus;
+      const table = {
+        3: '已完成奖励',
+        4: '已领取奖励',
+        6: '点评超时'
+      }
+      return table[status] || '任务已完成';
+    },
     // params() {
     //   const { selected } = this.examOption;
     //   // 使用适配器将数字12 转换为 {grade: 6, term: 2}
@@ -51,7 +60,7 @@ export default {
     //   return params;
     // },
     ableToCommit() {
-      return [1, 2].indexOf(this.taskStatus.status) == -1;
+      return this.taskStatus.status == -1 || this.taskStatus == 0;
     },
     timeStampToDate() {
       return utils.timeStampToDate(this.taskStatus.createTime);
@@ -98,20 +107,17 @@ export default {
     // if (isAndroid) {
     //   this.scroll = new BScroll(this.$refs.detailContent);
     // }
-    // 如果任务未完成，开始倒计时（已获取）
-    // console.log(this.taskStatus);
+    // 如果不能发布任务，则开始倒计时。
     if (!this.ableToCommit) {
       this.StartTimeDown();
     }
   },
   watch: {
-    // 监视任务状态，如果有变化，判断是否完成，然后开始倒计时
+    // 监视任务状态，如果有变化，如果不能发布任务，就开始倒计时
     // 且：固定选择的题库、禁止点击
     taskStatus(to, from) {
-      if (to.status == 1) {
+      if (!this.ableToCommit) {
         this.StartTimeDown();
-
-
       } else {
         clearInterval(this.timer);
       }
@@ -133,7 +139,7 @@ export default {
               window.location.reload();
             }, 1700)
           } else {
-            Toast.fail(data.msg);
+            Toast.fail(data.msg || '错误代码: ' + data.code);
           }
           this.showInteract = false;
         }).catch(err => {
@@ -144,8 +150,6 @@ export default {
       }
     },
     OnSelectSubject(subject, subjectIndex) {
-
-
       if (this.vipExpireDay || !subject.locked) {
         //  用户是vip || 没上锁
         if ([0, 1].indexOf(this.examOption.selected.grade) != -1 && [2, 5].indexOf(subject.id) != -1) {
@@ -224,7 +228,10 @@ export default {
 
     // 发布任务按钮倒计时，最后从服务器获取数据
     StartTimeDown() {
-      let newTime = this.taskStatus.createTime * 1000 + 24 * 60 * 60 * 1000;
+      // 今天0点
+      let tempTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime();
+      // 明天0点
+      let newTime = tempTime + 24 * 60 * 60 * 1000;
       // 先设置一次
       this.SetTimeDown(newTime);
       // 开始倒计时
@@ -234,10 +241,10 @@ export default {
       }, 1000);
 
       // 使用适配器将{grade: 1, term: 2} 转换为 2，并更新页面
-      let gradeIndex = GradeAdapter.setToNum({
-        grade: this.taskStatus.grade,
-        term: this.taskStatus.term
-      });
+      // let gradeIndex = GradeAdapter.setToNum({
+      //   grade: this.taskStatus.grade,
+      //   term: this.taskStatus.term
+      // });
       // 更新发布过的任务代码
       // let { selected } = this.examOption
       // selected.subject = this.taskStatus.subject - 1;

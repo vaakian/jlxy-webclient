@@ -36,7 +36,13 @@ export default new Vuex.Store({
     currentChild(state) {
       const { children, childActive } = state;
       if (children.length == 0) return false;
-      return children[childActive];
+      let child = children[childActive];
+      if (!child) {
+        localStorage.setItem('childActive', 0);
+        state.childActive = 0;
+        return children[0];
+      }
+      return child;
     },
     vipExpireDay(state) {
       // return 30;
@@ -47,7 +53,7 @@ export default new Vuex.Store({
 
       let currentChild = children[childActive];
       // 有绑定手表，未购买vip
-      if(currentChild.vipExpire == 0) return 0;
+      if (currentChild.vipExpire == 0) return 0;
 
       // 有数据
       let nowSeconds = new Date().getTime() / 1000;
@@ -68,6 +74,28 @@ export default new Vuex.Store({
       state.childActive = payload;
     },
     [types.SET_CHILDREN](state, payload) {
+      // payload = payload.map(child => {
+      //   if (child.watchId === undefined)
+      //     child.watchId = child.account;
+      //   return child;
+      // });
+      let cachedChildren = localStorage.getItem('children');
+      if (cachedChildren) {
+        cachedChildren = JSON.parse(cachedChildren);
+        console.log({cachedChildren})
+        // 从缓存，读children，并修改
+        payload = payload.map(child => {
+          cachedChildren.forEach(cachedChild => {
+            if (cachedChild.watchId == child.watchId) {
+              child.nickName = cachedChild.nickName;
+              child.img = cachedChild.img;
+              child.grade = cachedChild.grade;
+              child.term = cachedChild.term;
+            }
+          });
+          return child;
+        })
+      }
       state.children = payload;
     }
   },
@@ -97,9 +125,6 @@ export default new Vuex.Store({
         return res;
       }
       return Promise.reject('未登录');
-      /**
-       * 无法解析res的数据
-       */
     },
     async WeixinPay({ commit, state, dispatch, getters }, params) {
       const { watchId } = getters.currentChild;

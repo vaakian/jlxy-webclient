@@ -11,6 +11,8 @@ const SET_TASK_DETAIL = 'SET_TASK_DETAIL';
 // queryTask数据，用于互动首页第一个任务
 const SET_TASK_STATUS = 'SET_TASK_STATUS';
 
+// 更新孩子
+// const SET_CHILDREN
 /** 互动页面 */
 
 
