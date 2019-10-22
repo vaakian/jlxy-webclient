@@ -11,13 +11,8 @@
       :OnCancel="() => {showDilog = false}"
       v-show="showDilog"
     />
-    <!-- 已发布，显示内容 -->
-
-    <div
-      class="mission mission-still"
-      v-if="haveChildren && (taskStatus.status === 1 || taskStatus.status === 2)"
-      style="color: #818181"
-    >
+    <!-- 已发布，显示内容, ableToCommit为false时，也就是今天发布过任务。则保证有任务、有状态 -->
+    <div class="mission mission-still" v-if="!ableToCommit && haveChildren" style="color: #818181">
       <!-- 有孩子、有任务 -->
       <p>
         <span>{{timeStampToDate}}</span>
@@ -31,17 +26,23 @@
       </p>
       <hr size="1" color="#e8e8e8" />
       <div class="mission-below">
-        <!-- 未完成 -->
+        <!-- 未超时、未完成 -->
         <div class="text" v-if="taskStatus.status === 1">
           <p class="text-blue">任务等待完成中</p>
           <p class="text-blue" @click="folded = !folded">请耐心等待……</p>
         </div>
+        <!-- 超时、未完成 -->
+        <div v-else-if="taskStatus.status === 5">
+          <p class="text-red">任务超时</p>
+          <p class="text-blue">孩子未完成该任务</p>
+        </div>
         <!-- 已完成 -->
-        <div v-else-if="taskStatus.status === 2">
-          <p class="text-done">任务已完成</p>
+        <div v-else>
+          <p class="text-done">{{ finishTip }}</p>
           <p class="text-blue" @click="folded = !folded">查看详情点击展开></p>
         </div>
-        <!-- 未完成应该是disable状态 -->
+
+        <!-- 除了未评价，其他应该是disable状态 -->
         <button class="btn-red" :disabled="taskStatus.status != 2" @click="showInteract = true">奖励</button>
         <!-- 展开后的题目 -->
         <div class="detail" :style="{height: folded ? 0: '150px'}">
@@ -125,11 +126,11 @@
       </template>
     </div>
     <Remark
-    :OnConfirm="OnConfirmInteract"
-    :OnCancel="()=>{showInteract = false}"
-    confirmText="确认奖励"
-    cancelText="再想想"
-    v-show="showInteract"
+      :OnConfirm="OnConfirmInteract"
+      :OnCancel="()=>{showInteract = false}"
+      confirmText="确认奖励"
+      cancelText="再想想"
+      v-show="showInteract"
     />
   </div>
 </template>
