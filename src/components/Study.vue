@@ -12,7 +12,7 @@
           <div
             class="user-avatar"
             :style="{
-            background: `url(${currentChild.img || './static/default_avatar.png'})`,
+            background: `url(./static/${currentChild.img ? 'avatar' + currentChild.img :'default_avatar' }.png)center center / cover no-repeat`,
             backgroundSize: 'cover'
           }"
           >
@@ -58,7 +58,7 @@
           <p
             v-if="studyLog.hanzi + studyLog.suanshu + studyLog.chengyu + studyLog.gushi + studyLog.yingyu + studyLog.baike"
           >
-            昨天宝贝学习了
+            {{ nearestDate }}宝贝学习了
             <template v-for="(subject, type, index) in studyLog">
               <span :key="index">
                 <span v-if="index!=0">、</span>
@@ -72,7 +72,7 @@
         </div>
 
         <!-- 小提示 -->
-        <div class="study-mission" v-if="taskStatus.status != 1">
+        <div class="study-mission" v-if="ableToCommit">
           <p>
             今天还没给宝贝
             <span class="text-blue">
@@ -96,10 +96,15 @@
       </div>
 
       <!-- 学习动态 -->
-      <div class="study-status" v-if="Object.keys(studyLog).length">
+      <div class="study-status" v-if="studyLog.code === undefined && Object.keys(studyLog).length">
         <p class="sub-title">学习动态</p>
         <template v-for="(subject, type, index) in studyLog">
-          <Status :questions="studyLog[type]" :type="type" :timeStamp="studyLog[type][0].time" :key="index" />
+          <Status
+            :questions="studyLog[type]"
+            :type="type"
+            :timeStamp="studyLog[type][0].time"
+            :key="index"
+          />
         </template>
       </div>
     </div>
@@ -134,7 +139,7 @@ export default {
     transformedGrade() {
       const { grade, term } = this.currentChild;
       const gradeTable = '一二三四五六';
-      return `${gradeTable[grade - 1]}年级·${term == 1 ? '上' : '下'}册`
+      return `${gradeTable[grade - 1]}年级·${term == 1 ? '上' : '下'}学期`
     },
     ...mapGetters(['currentChild', 'haveChildren', 'vipExpireDay']),
     ...mapGetters('interact', ['allFinishedTask']),
@@ -146,6 +151,27 @@ export default {
       'children',
       'userInfo'
     ]),
+
+    // 宝贝完成时间
+    nearestDate() {
+      let keys = Object.keys(this.studyLog);
+      // 学习日志空，或请求失败
+      if (keys.length === 0 && keys.indexOf('code') !== -1) {
+        return '';
+      }
+      let MaxTimeStamp = 0;
+      for (let i = 0; i < keys.length; ++i) {
+        const subject = this.studyLog[keys[i]];
+        if (subject[0].time > MaxTimeStamp) {
+          MaxTimeStamp = subject[0].time;
+        }
+      }
+      let date = utils.timeStampToDate(MaxTimeStamp);
+      date = date.split('.');
+
+      return `${date[1]}月${date[2]}日`;
+
+    },
     childActive: {
       get() {
         return this.$store.state.childActive;
@@ -153,7 +179,10 @@ export default {
       set(v) {
         this.$store.commit(types.SWITCH_CHILD, v);
       }
-    }
+    },
+    ableToCommit() {
+      return this.taskStatus.status == -1;
+    },
   },
   methods: {
     ...mapActions({
