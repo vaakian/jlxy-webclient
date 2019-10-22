@@ -1,10 +1,16 @@
 <template>
   <div class="child">
-    <div class="avatar" :style="{'background': `url(${childInfo.img || './static/default_avatar.png'}) no-repeat`}"></div>
+    <div
+      class="avatar"
+      :style="{'background': `url(./static/${childInfo.img ? 'avatar' + childInfo.img :'default_avatar' }.png) no-repeat`}"
+    ></div>
     <div class="info">
       <p>{{ childInfo.nickName || '宝贝' }}</p>
       <p>正在学习 {{childInfo.grade}}年级 设备已绑定</p>
     </div>
+    <slot name="edit">
+      <!-- <p class="text-blue">修改资料></p> -->
+    </slot>
   </div>
 </template>
 
@@ -12,7 +18,12 @@
 import { mapState } from 'vuex';
 export default {
   name: 'child',
-  props: ['childInfo'],
+  props: {
+    childInfo: {
+      type: Object,
+      default: {}
+    }
+  },
   data() {
     return {
     }
@@ -22,6 +33,11 @@ export default {
     cnGrade() {
       // return Math.floor(childInfo.grade);
     }
+  },
+  methods: {
+    // OnEmitEditProfile() {
+    //   this.$emit('EditProfile', this.childInfo);
+    // }
   }
 }
 </script>
@@ -34,6 +50,7 @@ export default {
   border: 1px solid #e8e8e8;
   display: flex;
   align-items: center;
+  position: relative;
   // justify-content: center;
   .avatar {
     height: 55px;
