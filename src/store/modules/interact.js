@@ -4,14 +4,33 @@
 import types from '../types';
 import api from '../../api';
 import { Toast } from 'vant';
+function isToday(str) {
+  let now = new Date();
+  let cmp = new Date(str * 1000);
+  return now.getFullYear() == cmp.getFullYear() &&
+    now.getDate() == cmp.getDate() &&
+    now.getMonth() == cmp.getMonth();
+}
 const state = {
   taskStatus: {},
   taskDetail: {}
 }
 
 const mutations = {
-  [types.SET_TASK_STATUS](state, payload) {
-    state.taskStatus = payload;
+  [types.SET_TASK_STATUS](state, data) {
+    // 测试数据，往后倒23.5小时
+    // data = [{createTime: (new Date()).getTime() / 1000 - 23.5 * 60 * 60}];
+    // 先筛选出今天的任务，那么最后放到taskStatus的绝对是今天的， -1则没有
+    data = data.filter(task => isToday(task.createTime));
+    if (data.length) {
+      // 按创建时间降序，次要按状态升序
+      data.sort((a, b) => a.status - b.status);
+      data.sort((a, b) => b.createTime - a.createTime);
+      state.taskStatus = data[0];
+    } else {
+      state.taskStatus = { status: -1 };
+    }
+
     // state.taskStatus.status = 2;
   },
   [types.SET_TASK_DETAIL](state, payload) {
@@ -24,10 +43,10 @@ const getters = {
   // 互动页布置的任务
   currentTask(state) {
     const { taskDetail, taskStatus } = state;
-    if (taskStatus.status !== undefined && taskStatus.status != 1 && taskDetail) {
+    if (taskStatus.status !== undefined && taskDetail) {
       let currentTask = taskDetail[taskStatus.taskId];
       // 没获取到该任务
-      if (!currentTask) return {createTime: 0, status: -1, data: [] };
+      if (!currentTask) return { createTime: 0, status: -1, data: [] };
       // 获取到任务，但没有数据
       if (!currentTask.data) currentTask.data = [];
       return currentTask;
@@ -62,15 +81,8 @@ const actions = {
     // 正常返回
     if (res.data.code == 0 && res.data.data instanceof Array) {
       // -1代表没有任何任务详情
-      let {data} = res.data;
-      data = data.filter(task => [1, 2].indexOf(task.status) != -1);
-      if(data.length) {
-        // 排序
-        data.sort((a, b) => b.createTime-a.createTime);
-        data.sort((a, b) => a.status-b.status);
-        console.log({data});
-      }
-      commit(types.SET_TASK_STATUS, data[0] || { status: -1 });
+      let { data } = res.data;
+      commit(types.SET_TASK_STATUS, data);
     }
     return res;
   },
@@ -81,6 +93,8 @@ const actions = {
     });
     if (res.data.code == 0 && res.data.data) {
       commit(types.SET_TASK_DETAIL, res.data.data);
+    } else {
+      commit(types.SET_TASK_DETAIL, []);
     }
   },
 

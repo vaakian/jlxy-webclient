@@ -23,9 +23,11 @@ const actions = {
     });
 
 
-    // 请求到数据
-    if (true || Object.keys(res.data).indexOf('code') == -1) {
+    // 请求到数据，没请求到，清空之前的数据！
+    if (Object.keys(res.data).indexOf('code') == -1) {
       commit(types.SET_STUDY_LOG, res.data);
+    } else {
+      commit(types.SET_STUDY_LOG, {});
     }
     return res;
   }
