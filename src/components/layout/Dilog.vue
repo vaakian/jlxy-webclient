@@ -4,7 +4,7 @@
       <template v-slot:content="childProps">
         <div class="dilog-content">
           <div class="dilog-text">
-            <p>您正在给 <span class="text-blue">{{ currentChild.nickName || '宝贝' }}</span> {{ type }}：</p>
+            <p>您正在给 <span class="text-blue">{{ currentChild.nickName || '宝贝-' + currentChild.uid }}</span> {{ type }}：</p>
             <p>
               "
               <span class="text-blue">{{content}}</span>"请再次确认！

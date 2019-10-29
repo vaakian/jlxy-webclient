@@ -98,10 +98,10 @@ export default {
   },
   methods: {
     setDefaultInfo() {
-      this.name = this.childInfo.nickName || '宝贝';
+      this.name = this.childInfo.nickName || '宝贝-' + this.childInfo.uid;
       this.avatar = this.childInfo.img || 0;
       const { grade, term } = this.childInfo;
-      this.grade = adpater.setToNum({ grade, term });
+      this.grade = adpater.setToNum({ grade, term }) - 1;
     },
     Confirm() {
       this.showAvatarList = false;

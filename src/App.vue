@@ -49,9 +49,11 @@ export default {
     console.log('mount 获取手表');
     this.GetChildren().then(res => {
       // 获取到孩子后，再获取学习记录和任务记录。
-      this.GetStudyLog();
-      this.QueryTask();
-      this.TaskDetail();
+      if (Object.keys(res.data.data.children).length > 0) {
+        this.GetStudyLog();
+        this.QueryTask();
+        this.TaskDetail();
+      }
     });
 
 

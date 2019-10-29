@@ -33,13 +33,13 @@
                   class="user-active"
                   :style="{background: childActive == childIndex ? '#5f8ae8': ''}"
                 ></span>
-                <span>{{ child.nickName || '宝贝' }}</span>
+                <span>{{ child.nickName || '宝贝-' + child.uid }}</span>
               </li>
             </ul>
           </div>
 
           <div class="user-detail" v-if="currentChild">
-            <p class="name">{{ currentChild.nickName || '宝贝'}}</p>
+            <p class="name">{{ currentChild.nickName || '宝贝-' + currentChild.uid }}</p>
             <p class="grade">{{ transformedGrade || '' }}</p>
           </div>
           <div class="user-detail" v-else>
@@ -85,14 +85,19 @@
       <!-- 任务动态 -->
       <div class="mission-status" v-if="allFinishedTask.length">
         <p class="sub-title">任务动态</p>
-        <template v-for="(task, index) in allFinishedTask">
+          <Status
+            :questions="allFinishedTask[0].data"
+            :type="allFinishedTask[0].data[0].subject"
+            :timeStamp="allFinishedTask[0].createTime"
+          />
+        <!-- <template v-for="(task, index) in allFinishedTask">
           <Status
             :questions="task.data"
             :type="task.data[0].subject"
             :timeStamp="task.createTime"
             :key="index"
           />
-        </template>
+        </template> -->
       </div>
 
       <!-- 学习动态 -->

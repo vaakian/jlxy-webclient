@@ -45,6 +45,16 @@ ul li {
   background: #e95f5f;
   border: 1.5px solid #a81c1d;
 }
+.btn-green {
+  font-size: 13.9px;
+  color: white;
+  width: 90px;
+  height: 40px;
+  border-radius: 5px;
+  background: #45d200;
+  /* border: 1.5px solid #a81c1d; */
+  border: 1.5px solid #47be0b;
+}
 .text-blue {
   color:  #5f8ae8;
 }

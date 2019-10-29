@@ -17,7 +17,7 @@
       <p>
         <span>{{timeStampToDate}}</span>
         <span>你给</span>
-        <span class="text-blue">{{currentChild.nickName || '宝贝'}}</span>
+        <span class="text-blue">{{currentChild.nickName || '宝贝-' + currentChild.uid}}</span>
         <span>发布了一个任务：</span>
       </p>
       <p class="mission-content text-blue">
@@ -29,7 +29,7 @@
         <!-- 未超时、未完成 -->
         <div class="text" v-if="taskStatus.status === 1">
           <p class="text-blue">任务等待完成中</p>
-          <p class="text-blue" @click="folded = !folded">请耐心等待……</p>
+          <p class="text-blue" @click="folded = true">请耐心等待……</p>
         </div>
         <!-- 超时、未完成 -->
         <div v-else-if="taskStatus.status === 5">
@@ -43,7 +43,8 @@
         </div>
 
         <!-- 除了未评价，其他应该是disable状态 -->
-        <button class="btn-red" :disabled="taskStatus.status != 2" @click="showInteract = true">奖励</button>
+        <button class="btn-green" v-if="taskStatus.status != 2" @click="$router.go(0)">刷新</button>
+        <button class="btn-red" @click="showInteract = true" v-else>奖励</button>
         <!-- 展开后的题目 -->
         <div class="detail" :style="{height: folded ? 0: '150px'}">
           <Qtable :style="{height: '130px'}" :questions="currentTask.data" />

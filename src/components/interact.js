@@ -38,6 +38,7 @@ export default {
     ...mapGetters(['haveChildren', 'currentChild', 'vipExpireDay']),
     ...mapGetters('interact', ['allFinishedTask', 'currentTask']),
     ...mapState('interact', ['taskDetail', 'taskStatus']),
+    ...mapState(['childActive']),
     finishTip() {
       const { status } = this.taskStatus;
       const table = {
@@ -60,7 +61,7 @@ export default {
     //   return params;
     // },
     ableToCommit() {
-      return this.taskStatus.status == -1 || this.taskStatus == 0;
+      return !this.haveChildren || this.taskStatus.status == -1 || this.taskStatus == 0;
     },
     timeStampToDate() {
       return utils.timeStampToDate(this.taskStatus.createTime);
@@ -120,6 +121,14 @@ export default {
         this.StartTimeDown();
       } else {
         clearInterval(this.timer);
+      }
+    },
+    // 切换孩子，清空已选项
+    childActive(to, from) {
+      this.examOption.selected = {
+        subject: 0,
+        grade: 0,
+        studyType: 0
       }
     }
   },
@@ -188,6 +197,10 @@ export default {
     OnConfirmCommit() {
       if (this.examOption.selected.subject == -1) {
         Toast.fail('未选择题库');
+        return;
+      }
+      if (!this.haveChildren) {
+        Toast.fail('您还未绑定孩子的手表');
         return;
       }
       this.showDilog = true;

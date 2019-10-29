@@ -75,7 +75,7 @@
 
         <button
           class="btn-blue"
-          @click="showPayConfirm = true"
+          @click="OnPay"
         >{{vipExpireDay ? '延长VIP时间':'立即加入VIP'}}</button>
       </div>
     </div>
@@ -124,7 +124,7 @@ export default {
   },
   computed: {
     ...mapState(['userInfo']),
-    ...mapGetters(['currentChild', 'vipExpireDay'])
+    ...mapGetters(['currentChild', 'haveChildren', 'vipExpireDay'])
   },
   methods: {
     ...mapActions(['WeixinPay']),
@@ -134,6 +134,13 @@ export default {
       this.WeixinPay({
         type: this.vipPackageSelected
       });
+    },
+    OnPay() {
+      if (!this.haveChildren) {
+        Toast.fail('您还未绑定孩子的手表');
+        return;
+      }
+      this.showPayConfirm = true;
     }
   }
 }
