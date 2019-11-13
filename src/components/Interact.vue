@@ -136,9 +136,9 @@
   </div>
 </template>
 <script>
-import interact from './interact';
-export default interact;
+import interact from './interact'
+export default interact
 </script>
 <style lang="scss" scoped>
-@import "@/style/interact.scss";
+@import '@/style/interact.scss';
 </style>

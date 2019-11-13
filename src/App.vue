@@ -24,35 +24,35 @@
 
 <script>
 // 导入路由，用于判断标签切换动画方向、全局标题切换
-import routes from "@/router/routes";
-import Debug from "./components/layout/Debug";
-import { mapState, mapActions } from "vuex";
-import Cookies from "js-cookie";
-import axios from "axios";
+import routes from '@/router/routes'
+import Debug from './components/layout/Debug'
+import { mapState, mapActions } from 'vuex'
+import Cookies from 'js-cookie'
+import axios from 'axios'
 export default {
-  name: "jlxy",
+  name: 'jlxy',
   components: { Debug },
   data() {
     return {
-      transitionName: "",
+      transitionName: '',
       tabActive: 0, // 活动标签
       tabItems: [...routes]
-    };
+    }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(['userInfo'])
   },
   created() {
-    this.updateTitle();
-    console.log("mount 获取手表");
+    this.updateTitle()
+    console.log('mount 获取手表')
     this.GetChildren().then(res => {
       // 获取到孩子后，再获取学习记录和任务记录。
       if (Object.keys(res.data.data.children).length > 0) {
-        this.GetStudyLog();
-        this.QueryTask();
-        this.TaskDetail();
+        this.GetStudyLog()
+        this.QueryTask()
+        this.TaskDetail()
       }
-    });
+    })
   },
   mounted() {
     // 挂载后 更新overlay高度
@@ -65,32 +65,32 @@ export default {
     // 路由切换动画方向、全局标题切换
     $route(to, from) {
       this.transitionName =
-        to.meta.index > from.meta.index ? "slide-left" : "slide-right";
-      this.updateTitle();
+        to.meta.index > from.meta.index ? 'slide-left' : 'slide-right'
+      this.updateTitle()
     }
   },
   methods: {
     ...mapActions({
-      GetChildren: "GetChildren",
-      GetStudyLog: "study/GetStudyLog",
-      QueryTask: "interact/QueryTask",
-      TaskDetail: "interact/TaskDetail"
+      GetChildren: 'GetChildren',
+      GetStudyLog: 'study/GetStudyLog',
+      QueryTask: 'interact/QueryTask',
+      TaskDetail: 'interact/TaskDetail'
     }),
     updateTitle() {
-      const jlxyTitle = document.getElementById("jlxy-title");
-      jlxyTitle.innerText = this.$route.meta.title;
-      this.updateActiveTab();
+      const jlxyTitle = document.getElementById('jlxy-title')
+      jlxyTitle.innerText = this.$route.meta.title
+      this.updateActiveTab()
     },
     updateActiveTab() {
-      const { path } = this.$route;
-      const { tabItems } = this;
+      const { path } = this.$route
+      const { tabItems } = this
       // 更新活动标签
       for (let index in tabItems) {
-        if (tabItems[index].path == path) this.tabActive = index;
+        if (tabItems[index].path == path) this.tabActive = index
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>
