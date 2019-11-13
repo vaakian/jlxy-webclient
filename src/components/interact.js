@@ -1,24 +1,20 @@
-import Status from './layout/Status';
+import { Toast } from 'vant';
+import { mapActions, mapGetters, mapState } from 'vuex';
+import utils from '../utils';
+import GradeAdapter from './js/adapter';
+import taskCase from './js/taskCase';
 import Dilog from './layout/Dilog';
 import Qtable from './layout/Qtable';
 import Remark from './layout/Remark';
-import taskCase from './js/taskCase';
-import { Toast } from 'vant';
-import { mapActions, mapState, mapGetters } from 'vuex';
-import GradeAdapter from './js/adapter';
-import utils from '../utils';
-// 提升滑动体验
-// import BScroll from 'better-scroll';
+import Status from './layout/Status';
 export default {
   name: 'interact',
   components: { Status, Dilog, Qtable, Remark },
   data() {
     return {
       folded: true,
-      // typeImgs: ['hanzi', 'chengyu', 'danci', 'suanshu', 'gushi', 'yingyu'],
       showDilog: false,
       showInteract: false,
-      // missionStill: false,
       countDown: {
         begin: 0,
         left: '00:00:00'
@@ -48,18 +44,7 @@ export default {
       }
       return table[status] || '任务已完成';
     },
-    // params() {
-    //   const { selected } = this.examOption;
-    //   // 使用适配器将数字12 转换为 {grade: 6, term: 2}
-    //   let gradeTerm = GradeAdapter.numToSet(selected.grade);
-    //   const params = {
-    //     subject: this.subjects[selected.subject].id,
-    //     grade: gradeTerm.grade,
-    //     term: gradeTerm.term,
-    //     type: selected.studyType + 1
-    //   }
-    //   return params;
-    // },
+
     ableToCommit() {
       return !this.haveChildren || this.taskStatus.status == -1 || this.taskStatus == 0;
     },
@@ -102,12 +87,7 @@ export default {
     // 待定完成任务内容转换
   },
   activated() {
-    // let u = navigator.userAgent;
-    // let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
-    // 优化安卓终端的滑动体验
-    // if (isAndroid) {
-    //   this.scroll = new BScroll(this.$refs.detailContent);
-    // }
+
     // 如果不能发布任务，则开始倒计时。
     if (!this.ableToCommit) {
       this.StartTimeDown();
@@ -134,6 +114,11 @@ export default {
   },
   methods: {
     ...mapActions('interact', ['CommitTask', 'QueryTask', 'TaskDetail', 'Interact']),
+    OnReloadTask() {
+      // this.GetStudyLog();
+      this.QueryTask();
+      this.TaskDetail();
+    },
     OnConfirmInteract(remarkId) {
       // 点评代码合法
       if ([1, 2, 3].indexOf(remarkId) != -1) {

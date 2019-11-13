@@ -43,7 +43,7 @@
         </div>
 
         <!-- 除了未评价，其他应该是disable状态 -->
-        <button class="btn-green" v-if="taskStatus.status != 2" @click="$router.go(0)">刷新</button>
+        <button class="btn-green" v-if="taskStatus.status != 2" @click="OnReloadTask">刷新</button>
         <button class="btn-red" @click="showInteract = true" v-else>奖励</button>
         <!-- 展开后的题目 -->
         <div class="detail" :style="{height: folded ? 0: '150px'}">
