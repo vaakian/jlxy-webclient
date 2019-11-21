@@ -20,7 +20,6 @@ const SET_TASK_STATUS = 'SET_TASK_STATUS';
 
 
 /** 设置页面 */
-
 export default {
   SET_STUDY_LOG,
   SWITCH_CHILD,

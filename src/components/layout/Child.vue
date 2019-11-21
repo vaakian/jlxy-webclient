@@ -2,10 +2,10 @@
   <div class="child">
     <div
       class="avatar"
-      :style="{'background': `url(./static/${childInfo.img ? 'avatar' + childInfo.img :'default_avatar' }.png) no-repeat`}"
+      :style="{'background': `url(./static/avatar${childInfo.img}.png) no-repeat`}"
     ></div>
     <div class="info">
-      <p>{{ childInfo.nickName || '宝贝-' + childInfo.uid }}</p>
+      <p>{{ childInfo.nickName }}</p>
       <p>正在学习 {{childInfo.grade}}年级 设备已绑定</p>
     </div>
     <slot name="edit">

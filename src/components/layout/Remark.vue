@@ -128,13 +128,4 @@ export default {
   }
 }
 
-.btn-outline {
-  font-size: 13.9px;
-  color: #5f8ae8;
-  width: 90px;
-  height: 40px;
-  background: white;
-  border: 1.5px solid #3f69c4;
-  border-radius: 5px;
-}
 </style>

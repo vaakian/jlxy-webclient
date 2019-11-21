@@ -50,15 +50,25 @@ const Interact = params => {
   const res = jlxyHttp.get('interact', params);
   return res;
 }
+//7. 手表资料迁移
+const AccountMigrate = params => {
+  const res = jlxyHttp.get('accountMigrate', params);
+  return res;
+}
 // 微信下单
 const WeixinPayOrder = params => {
   const res = wxHttp.get('/wx/pay', params)
   return res;
 }
 
+
 export default {
   GetStudyLog,
   WeixinPayOrder,
-  GetChildren, CommitTask, QueryTask, TaskDetail,
-  Interact
+  GetChildren,
+  CommitTask,
+  QueryTask,
+  TaskDetail,
+  Interact,
+  AccountMigrate
 }  

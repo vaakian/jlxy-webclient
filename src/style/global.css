@@ -45,6 +45,16 @@ ul li {
   background: #e95f5f;
   border: 1.5px solid #a81c1d;
 }
+
+.btn-outline {
+  font-size: 13.9px;
+  color: #5f8ae8;
+  width: 90px;
+  height: 40px;
+  background: white;
+  border: 1.5px solid #3f69c4;
+  border-radius: 5px;
+}
 .btn-green {
   font-size: 13.9px;
   color: white;
@@ -61,10 +71,17 @@ ul li {
 .text-orange {
   color: #f19501;
 }
-
-
+.text-black {
+  color: black !important;
+}
+.text-green {
+  color: #45d200 !important;
+}
 .text-red {
   color: #fa5858;
+}
+.text-gray {
+  color: #999;
 }
 .sub-title {
   font-size: 15px;
@@ -86,9 +103,16 @@ ul li {
   box-shadow: 0 -3px 0 orange;
 }
 
-button:disabled {
+
+
+.btn-disabled {
+  font-size: 13.9px;
+  color: white;
+  /* width: 90px; */
+  height: 40px;
   background: #d9d9d9;
   border: 2px solid #aaaaaa;
+  border-radius: 5px;
 }
 .text-done {
   color: #45d200;

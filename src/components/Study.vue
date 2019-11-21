@@ -12,7 +12,7 @@
           <div
             class="user-avatar"
             :style="{
-            background: `url(./static/${currentChild.img ? 'avatar' + currentChild.img :'default_avatar' }.png)center center / cover no-repeat`,
+            background: `url(./static/avatar${currentChild.img}.png)center center / cover no-repeat`,
             backgroundSize: 'cover'
           }"
           >
@@ -33,13 +33,13 @@
                   class="user-active"
                   :style="{background: childActive == childIndex ? '#5f8ae8': ''}"
                 ></span>
-                <span>{{ child.nickName || '宝贝-' + child.uid }}</span>
+                <span>{{ child.nickName}}</span>
               </li>
             </ul>
           </div>
 
           <div class="user-detail" v-if="currentChild">
-            <p class="name">{{ currentChild.nickName || '宝贝-' + currentChild.uid }}</p>
+            <p class="name">{{ currentChild.nickName}}</p>
             <p class="grade">{{ transformedGrade || '' }}</p>
           </div>
           <div class="user-detail" v-else>

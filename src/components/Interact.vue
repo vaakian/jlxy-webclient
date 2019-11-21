@@ -17,7 +17,7 @@
       <p>
         <span>{{timeStampToDate}}</span>
         <span>你给</span>
-        <span class="text-blue">{{currentChild.nickName || '宝贝-' + currentChild.uid}}</span>
+        <span class="text-blue">{{currentChild.nickName}}</span>
         <span>发布了一个任务：</span>
       </p>
       <p class="mission-content text-blue">

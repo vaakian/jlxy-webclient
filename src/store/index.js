@@ -9,6 +9,14 @@ import { Toast } from 'vant';
 import utils from '../utils';
 Vue.use(Vuex);
 
+
+/* ----- debug ------ */
+// Cookies.set('token', 'none')
+// Cookies.set('openid', 'oEgLkskV4p8fuhcIT-Srz8EhdX7o')
+// Cookies.set('nickname', 'Eugene')
+/* ----- debug ------ */
+
+
 const userInfo = {
   openId: Cookies.get('openid'),
   token: Cookies.get('token'),
@@ -82,25 +90,36 @@ export default new Vuex.Store({
       let cachedChildren = localStorage.getItem('children');
       if (cachedChildren) {
         cachedChildren = JSON.parse(cachedChildren);
-        console.log({cachedChildren})
+        console.log({ cachedChildren })
         // 从缓存，读children，并修改
         payload = payload.map(child => {
           cachedChildren.forEach(cachedChild => {
             if (cachedChild.watchId == child.watchId) {
-              child.nickName = cachedChild.nickName;
-              child.img = cachedChild.img;
+              child.nickName = cachedChild.nickName || '宝贝-' + child.uid;
+              child.img = cachedChild.img || 'default';
               child.grade = cachedChild.grade;
               child.term = cachedChild.term;
             }
           });
           return child;
-        })
+        });
       }
+      // 设置默认昵称
+      payload = payload.map(child => {
+        child.nickName = child.nickName || '宝贝-' + child.uid;
+        child.img = child.img || 'default';
+        return child;
+      });
       state.children = payload;
     }
   },
   actions: {
     // dispatch触发，最后进行commit，（可选）
+    async AccountMigrate({ state }, params) {
+      const { openId } = state.userInfo;
+      const res = await api.AccountMigrate({ openId, ...params });
+      return res;
+    },
     async GetChildren({ commit, state }) {
       // 不带token，单独处理
       const { openId, nickName } = state.userInfo;

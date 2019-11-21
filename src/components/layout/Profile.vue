@@ -1,8 +1,8 @@
 <template>
   <div class="profile" @click="OnClickOverlay">
     <Overlay>
-      <template v-slot:content="childProps">
-        <div class="inner" @click.stop="">
+      <template #content="childProps">
+        <div class="inner" @click.stop>
           <div
             class="avatar"
             :style="{
@@ -54,19 +54,29 @@
           <div class="button">
             <button class="btn-blue" @click="Confirm">确定</button>
           </div>
+
+          <!-- 账号迁移按钮 -->
+          <div class="migrate" @click="OnShowMigrate"></div>
         </div>
       </template>
     </Overlay>
+    <!-- 账号迁移实体 -->
+    <div @click.stop>
+      <Migrate :oldChild="childInfo" :OnClose="()=>{showMigrate=false}" v-show="showMigrate" />
+    </div>
   </div>
 </template>
 <script>
-import Overlay from './Overlay';
-import adpater from '../js/adapter';
+import Overlay from './Overlay'
+import Migrate from './Migrate'
+import adpater from '../js/adapter'
+import { mapState } from 'vuex'
+import { Toast } from 'vant'
 export default {
   props: {
     OnConfirmProfile: {
       type: Function,
-      default: () => { }
+      default: () => {}
     },
     childInfo: {
       type: Object,
@@ -77,7 +87,7 @@ export default {
       default: () => {}
     }
   },
-  components: { Overlay },
+  components: { Overlay, Migrate },
   data() {
     return {
       avatar: 0,
@@ -85,29 +95,45 @@ export default {
       name: '',
 
       // 逻辑数据
-      showAvatarList: false
+      showAvatarList: false,
+      showMigrate: false
     }
   },
   watch: {
     childInfo() {
-      this.setDefaultInfo();
+      this.setDefaultInfo()
     }
   },
   mounted() {
-    this.setDefaultInfo();
+    this.setDefaultInfo()
+  },
+  computed: {
+    ...mapState(['children'])
   },
   methods: {
     setDefaultInfo() {
-      this.name = this.childInfo.nickName || '宝贝-' + this.childInfo.uid;
-      this.avatar = this.childInfo.img || 0;
-      const { grade, term } = this.childInfo;
-      this.grade = adpater.setToNum({ grade, term }) - 1;
+      this.name = this.childInfo.nickName
+      this.avatar = this.childInfo.img || 0
+      const { grade, term } = this.childInfo
+      this.grade = adpater.setToNum({ grade, term }) - 1
     },
     Confirm() {
-      this.showAvatarList = false;
-      let { grade: gradeIndex, name, avatar } = this;
-      let { grade, term } = adpater.numToSet(gradeIndex);
-      this.OnConfirmProfile({ name, avatar, grade, term });
+      this.showAvatarList = false
+      let { grade: gradeIndex, name, avatar } = this
+      let { grade, term } = adpater.numToSet(gradeIndex)
+      this.OnConfirmProfile({ name, avatar, grade, term })
+    },
+    OnShowMigrate() {
+      if (this.children.length > 1) {
+        this.showMigrate = true
+      } else {
+        Toast({
+          message:
+            '您还没有绑定新手表账号。请用新手表下载精灵校园，扫描二维码添加账号后，才可使用本功能。',
+          duration: 5000
+        })
+        this.showMigrate = false
+      }
     }
   }
 }
@@ -128,6 +154,15 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  .migrate {
+    width: 60px;
+    height: 60px;
+    background: url(../../../static/mig.png) no-repeat;
+    background-size: cover;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
   .avatar {
     height: 65px;
     width: 65px;
