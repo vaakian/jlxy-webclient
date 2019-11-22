@@ -82,10 +82,10 @@ TODO: 确定按钮显示逻辑
 不显示：请求中、迁移成功
 显示：请求前，迁移失败
 */
-import Overlay from './Overlay'
-import MigrateConfirm from './Migrate-confirm'
-import { mapState, mapGetters, mapActions } from 'vuex'
-import { Toast } from 'vant'
+import Overlay from './Overlay';
+import MigrateConfirm from './Migrate-confirm';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import { Toast } from 'vant';
 export default {
   props: {
     oldChild: {
@@ -108,87 +108,89 @@ export default {
       isSuccess: false,
       newWatchId: '',
       msg: ''
-    }
+    };
   },
   computed: {
     ...mapState(['children']),
     ...mapGetters(['haveChildren']),
     ableToMigrate() {
-      return this.haveChildren && this.newWatchId !== ''
+      return this.haveChildren && this.newWatchId !== '';
     },
     newChild() {
       return this.newWatchId
         ? this.childToBeSelected.find(child => {
-            console.log(child)
-            return child.watchId === this.newWatchId
+            console.log(child);
+            return child.watchId === this.newWatchId;
           })
-        : {}
+        : {};
     },
     // 待选孩子
     childToBeSelected() {
       return this.children.filter(
         child => child.watchId !== this.oldChild.watchId
-      )
+      );
     }
   },
   methods: {
-    // 点击确定迁移回调函数
     ...mapActions(['AccountMigrate']),
+    // 点击确定迁移回调函数
     OnConfirm() {
-      const TOAST_DURATION = 5000
-      this.showConfirm = false
-      Toast({ message: 'good!' })
-      const { AccountMigrate } = this
+      const TOAST_DURATION = 5000;
+      this.showConfirm = false;
+      const { AccountMigrate } = this;
       // set isLoading, isSuccess
-      this.isLoading = true
-      this.isSuccess = false
-      AccountMigrate({ oldWatchId: 'test', newWatchId: 'test' })
+      this.isLoading = true;
+      this.isSuccess = false;
+      const { oldChild, newChild } = this;
+      AccountMigrate({
+        oldWatchId: oldChild.watchId,
+        newWatchId: newChild.watchId
+      })
         .then(({ data: { code, msg } }) => {
           // set success
           if (code == 0) {
-            // 显示成功
-            this.isSuccess = true
-            this.msg = '转移成功'
+            // 转移成功：显示 绿色 '转移成功'
+            this.isSuccess = true;
+            this.msg = '转移成功';
             Toast({
               message: '转移成功，3后重新载入！',
               duration: 2500
-            })
+            });
             setTimeout(() => {
-              location.reload()
-            }, 3000)
+              location.reload();
+            }, 3000);
           } else {
-            // 显示errMsg
-            this.msg = msg
+            // 转移失败：显示 红色 返回的msg
+            this.msg = msg;
             Toast({
               message: msg,
               duration: 2500
-            })
+            });
           }
-          console.log({ code, msg })
         })
         .catch(err => {
-          console.log({ err })
-          this.errMsg = '网络错误'
+          console.log({ err });
+          this.errMsg = '网络错误';
         })
         .finally(fin => {
-          console.log({ fin })
-          this.isLoading = false
-        })
+          console.log({ fin });
+          this.isLoading = false;
+        });
     }
   },
   watch: {
     oldChild() {
       // 老手表切换，清空数据
-      this.newWatchId = ''
-      this.isSuccess = false
+      this.newWatchId = '';
+      this.isSuccess = false;
     },
     newChild() {
       // 新手标切换，清空成功、消息
-      this.isSuccess = false
-      this.msg = ''
+      this.isSuccess = false;
+      this.msg = '';
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

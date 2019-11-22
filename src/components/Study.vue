@@ -12,7 +12,7 @@
           <div
             class="user-avatar"
             :style="{
-            background: `url(./static/avatar${currentChild.img}.png)center center / cover no-repeat`,
+            background: `url(./static/avatar${currentChild.img || 'default'}.png)center center / cover no-repeat`,
             backgroundSize: 'cover'
           }"
           >

@@ -87,6 +87,8 @@ export default new Vuex.Store({
       //     child.watchId = child.account;
       //   return child;
       // });
+      // const testChildren = [{ watchId: '123', term: 1, grade: 1, nickName: 'nc', img: 1 }];
+      // payload = testChildren;
       let cachedChildren = localStorage.getItem('children');
       if (cachedChildren) {
         cachedChildren = JSON.parse(cachedChildren);
@@ -110,7 +112,8 @@ export default new Vuex.Store({
         child.img = child.img || 'default';
         return child;
       });
-      state.children = payload;
+
+      state.children = [...payload,];
     }
   },
   actions: {
