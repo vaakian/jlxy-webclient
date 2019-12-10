@@ -1,4 +1,4 @@
-import Study from '@/components/Study';
+import Study from '@/components/Study.vue';
 import Interact from '@/components/Interact.vue';
 import Mall from '@/components/Mall';
 import Setting from '@/components/Setting';

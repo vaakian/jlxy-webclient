@@ -27,7 +27,7 @@
             <span class="text-orange">30</span>
           </p>
           <p>原价￥35元</p>
-          <p class="text-blue">赠送200钻</p>
+          <!-- <p class="text-blue">赠送200钻</p> -->
         </div>
 
         <div
@@ -43,7 +43,7 @@
             <span class="text-orange">150</span>
           </p>
           <p>原价￥180元</p>
-          <p class="text-blue">赠送1500钻</p>
+          <!-- <p class="text-blue">赠送1500钻</p> -->
         </div>
 
         <div
@@ -59,7 +59,7 @@
             <span class="text-orange">240</span>
           </p>
           <p>原价￥365元</p>
-          <p class="text-blue">赠送4000钻</p>
+          <!-- <p class="text-blue">赠送4000钻</p> -->
         </div>
       </div>
       <!-- VIP套餐说明 -->

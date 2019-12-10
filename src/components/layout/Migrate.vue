@@ -77,11 +77,7 @@
 </template>
 
 <script>
-/* 
-TODO: 确定按钮显示逻辑
-不显示：请求中、迁移成功
-显示：请求前，迁移失败
-*/
+
 import Overlay from './Overlay';
 import MigrateConfirm from './Migrate-confirm';
 import { mapState, mapGetters, mapActions } from 'vuex';

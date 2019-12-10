@@ -1,6 +1,6 @@
 import axios from 'axios';
 import statusCode from './statusCode';
-// 最好导入全局提示窗口，便于拦截器提示。
+// 导入全局提示窗口便于拦截器提示
 import { Toast } from 'vant';
 import Cookies from 'js-cookie';
 import utils from '@/utils';
@@ -8,7 +8,7 @@ const service = axios.create({
   baseURL: process.env.BASE_API,
   // baseURL: 'http://huanchuang.redpoint178.com',
   timeout: 30000,
-  withCredentials: false, // allow cookie
+  withCredentials: false,
 });
 // 取消请求接口
 const CancelToken = axios.CancelToken;
@@ -23,9 +23,10 @@ service.interceptors.request.use(config => {
     message: '加载中……',
     duration: 30000
   })
+  // 请求自动带上token、openId
   config.params.token = Cookies.get('token')
   config.params.openId = Cookies.get('openid')
-  if(!Cookies.get('token') || !Cookies.get('openid')) {
+  if (!Cookies.get('token') || !Cookies.get('openid')) {
     Toast.fail({
       message: '未登录'
     });
@@ -42,7 +43,6 @@ service.interceptors.request.use(config => {
 }, error => {
   //  提示请求错误
   Toast('请检查您的网络~');
-  // 不返回error|reject则被then捕获
   return Promise.error(error);
 });
 
@@ -58,9 +58,8 @@ service.interceptors.response.use(response => {
   });
   return response;
 }, error => {
-  // 提示响应错误
+  // 提示http错误码对应的错误
 
-  // 不reject | error 就被then捕获了
   if (error && error.response) {
     const message = statusCode[error.response.status];
     error.message = message;

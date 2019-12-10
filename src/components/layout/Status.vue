@@ -53,10 +53,9 @@
   </div>
 </template>
 <script>
-// import Collapse from './Collapse';
+
 import Qtable from './Qtable';
 // import TestCase from '@/components/js/statusTestCase';
-// 更加流畅的滑动，原生滑动比较木、卡顿
 import BScroll from 'better-scroll';
 // store
 import { mapActions } from 'vuex';

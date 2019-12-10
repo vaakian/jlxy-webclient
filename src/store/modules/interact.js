@@ -1,12 +1,10 @@
-/**
- * @brief 学习界面 - 全局状态
- */
+/* 学习界面 - 全局状态 */
 import types from '../types';
 import api from '../../api';
 import { Toast } from 'vant';
-function isToday(str) {
+const isToday = timestamp => {
   let now = new Date();
-  let cmp = new Date(str * 1000);
+  let cmp = new Date(timestamp * 1000);
   return now.getFullYear() == cmp.getFullYear() &&
     now.getDate() == cmp.getDate() &&
     now.getMonth() == cmp.getMonth();
@@ -54,7 +52,7 @@ const getters = {
     // 否则一题都没有
     return { createTime: 0, data: [] };
   },
-  // 历史任务列表（已完成），taskid索引的任务转数组
+  // 历史任务列表（已完成），先将taskid索引的任务转数组
   allFinishedTask(state) {
     const { taskDetail } = state;
     let result = [];
@@ -86,7 +84,7 @@ const actions = {
     }
     return res;
   },
-  // 2. 请求任务详情
+  // 请求任务详情
   async TaskDetail({ rootGetters, commit }) {
     const res = await api.TaskDetail({
       watchId: rootGetters.currentChild.watchId

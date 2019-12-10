@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import Cookies from 'js-cookie';
 import api from '../api';
-/* 导入某些子状态进行合并 */
 import { study, interact } from './modules';
 import types from './types';
 import { Toast } from 'vant';
@@ -17,6 +16,7 @@ Vue.use(Vuex);
 /* ----- debug ------ */
 
 
+// 从本地缓存、cookies读入数据
 const userInfo = {
   openId: Cookies.get('openid'),
   token: Cookies.get('token'),
@@ -28,7 +28,7 @@ const childActive = localStorage.getItem('childActive') || 0;
 const state = {
   children: [
   ],
-  childActive: childActive, // 当前选择的孩子编号
+  childActive, // 当前选择的孩子编号
   userInfo
 }
 
@@ -52,6 +52,7 @@ export default new Vuex.Store({
       }
       return child;
     },
+    // 返回剩余天数取整数
     vipExpireDay(state) {
       // return 30;
       const { children, childActive } = state;
@@ -70,9 +71,9 @@ export default new Vuex.Store({
       let leftSeconds = expireSeconds / 60 / 60 / 24;
       return leftSeconds.toFixed(0);
     },
+    // 有绑定手表状态
     haveChildren(state) {
       return state.children.length > 0;
-      // return true;
     }
   },
   mutations: {
@@ -82,18 +83,12 @@ export default new Vuex.Store({
       state.childActive = payload;
     },
     [types.SET_CHILDREN](state, payload) {
-      // payload = payload.map(child => {
-      //   if (child.watchId === undefined)
-      //     child.watchId = child.account;
-      //   return child;
-      // });
-      // const testChildren = [{ watchId: '123', term: 1, grade: 1, nickName: 'nc', img: 1 }];
-      // payload = testChildren;
+
       let cachedChildren = localStorage.getItem('children');
       if (cachedChildren) {
         cachedChildren = JSON.parse(cachedChildren);
         console.log({ cachedChildren })
-        // 从缓存，读children，并修改
+        // 从缓存，读children，并修改信息
         payload = payload.map(child => {
           cachedChildren.forEach(cachedChild => {
             if (cachedChild.watchId == child.watchId) {
@@ -106,14 +101,16 @@ export default new Vuex.Store({
           return child;
         });
       }
-      // 设置默认昵称
+      // 最后设置默认昵称
       payload = payload.map(child => {
         child.nickName = child.nickName || '宝贝-' + child.uid;
         child.img = child.img || 'default';
         return child;
       });
 
-      state.children = [...payload,];
+      // 测试代码
+      // state.children = [...payload,];
+      state.children = payload;
     }
   },
   actions: {
@@ -131,7 +128,8 @@ export default new Vuex.Store({
         const res = await api.GetChildren({
           openId,
           nickName,
-          time
+          time,
+          from: 1
         });
         console.log(res.data);
         if (res.data && res.data.code == 0) {
@@ -154,6 +152,7 @@ export default new Vuex.Store({
         Toast.fail('您还没有绑定孩子的手表');
         return Promise.reject('未绑定手表');
       }
+      // 有孩子则向服务器进行下单
       params.watchId = watchId;
       const res = await api.WeixinPayOrder(params);
       const orderInfo = res.data;
@@ -181,11 +180,6 @@ export default new Vuex.Store({
   }
 })
 
-/**
- * 1. 先写api不用await，
- * 2. actions里面使用async，await后 判断是否进行commit（async本身就是一个promise）
- * 3. async后的actions可以进一步then 做其他操作
- */
 
 
 /*

@@ -1,8 +1,8 @@
 /**
- * @brief 封装异步网络请求
- * @author 熊维建
- * @date 2019年9月21日22:16:05
+ * 封装异步网络请求
+ * 2019年9月21日22:16:05
  */
+
 // api已带上openid、token，只需传入业务参数
 import { jlxyHttp, wxHttp } from '../service';
 import utils from '../utils';
@@ -36,11 +36,11 @@ const QueryTask = params => {
 
 // 5. 任务详情（互动页 如果完成：按照任务id获得）
 const TaskDetail = data => {
-  const verify = {
+  const auth = {
     token: Cookies.get('token'),
     openId: Cookies.get('openid')
   };
-  data = { ...data, ...verify };
+  data = { ...data, ...auth };
   data.sign = utils.GenSign(data);
   const res = jlxyHttp.post('taskDetail', data);
   return res;
